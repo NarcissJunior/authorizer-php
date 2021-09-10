@@ -1,0 +1,17 @@
+{
+    "name": "narciss/authorizer",
+    "description": "Authorizer test for Nubank",
+    "type": "project",
+    "license": "nil",
+    "autoload": {
+        "psr-4": {
+            "Authorizer\\": "src/",
+            "Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "phpunit/phpunit": "^9.5",
+        "ext-json": "*"
+    }
+}
