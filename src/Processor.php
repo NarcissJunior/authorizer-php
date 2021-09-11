@@ -36,6 +36,7 @@ class Processor
                 echo "deu ruim";
                 break;
         }
+        return [];
     }
 
 }

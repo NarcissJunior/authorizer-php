@@ -3,38 +3,34 @@
 namespace Tests;
 
 use Authorizer\Processor;
+use Authorizer\repositories\AccountRepositoryInMemory;
+use Authorizer\repositories\TransactionRepositoryInMemory;
+use Authorizer\services\AccountService;
+use Authorizer\services\TransactionService;
 use PHPUnit\Framework\TestCase;
 
 class ProcessorTest extends TestCase
 {
-    public function test_processor_returns_jesus()
-    {
-
-    }
-
     public function test_operation_returns_account()
     {
         // Arrange
+        $transactionRules = [
+            \Authorizer\services\transaction_rules\DoubleTransactionRule::class,
+            \Authorizer\services\transaction_rules\HighFrequencySmallIntervalRule::class
+        ];
+        $accountRepository = new AccountRepositoryInMemory();
+        $accountService = new AccountService($accountRepository);
+        $transactionRepository = new TransactionRepositoryInMemory();
+        $transactionService = new TransactionService($accountRepository, $transactionRepository, $transactionRules);
+        $processor = new Processor($accountService, $transactionService);
+
+        $actual = "";
         $expected = "account";
-        $processor = new Processor();
 
         // Act
-        $accountOperation = $processor->getOperation("account");
+        $accountOperation = $processor->process("account");
 
         // Assert
-        $this->assertEquals($expected, $accountOperation);
-    }
-
-    public function test_operation_returns_transaction()
-    {
-        // Arrange
-        $expected = "transaction";
-        $processor = new Processor();
-
-        // Act
-        $accountOperation = $processor->getOperation("transaction");
-
-        // Assert
-        $this->assertEquals($expected, $accountOperation);
+        self::assertEquals($expected, $accountOperation);
     }
 }
