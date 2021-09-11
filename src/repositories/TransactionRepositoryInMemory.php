@@ -6,10 +6,23 @@ use authorizer\entities\Transaction;
 
 class TransactionRepositoryInMemory implements TransactionRepository
 {
-    protected array $accounts;
+    protected array $transactions;
 
     public function __construct()
     {
-        $this->accounts = [];
+        $this->transactions = [];
     }
+
+    public function getTransactions(): ?array
+    {
+        return $this->transactions ?? null;
+    }
+
+    public function createTransaction(Transaction $transaction): void
+    {
+        $dateTime = strtotime($transaction->time);
+        $transaction['time'] = $dateTime;
+        $this->transactions[] = $transaction;
+    }
+
 }

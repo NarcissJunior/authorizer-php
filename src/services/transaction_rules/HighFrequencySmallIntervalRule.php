@@ -2,13 +2,31 @@
 
 namespace Authorizer\services\transaction_rules;
 
+use Authorizer\repositories\TransactionRepositoryInMemory;
+
 class HighFrequencySmallIntervalRule implements TransactionRule
 {
-    public function authorize()
+    public function authorize(): string
     {
-        if(true){
-            return "high-frequency-small-interval";
+        $transactionRepository = new TransactionRepositoryInMemory();
+        $transactions = $transactionRepository->getTransactions();
+
+        if ($transactions[0] === null)
+        {
+            return "";
         }
-        return null;
+
+        $myCount = 0;
+
+        for ($i = 0; $i <= count($transactions); $i++) {
+            if ($transactions[$i]->time === $transactions[$i-1]) {
+                $myCount++;
+            }
+            if ($myCount == 3) {
+                return "high-frequency-small-interval";
+            }
+        }
+
+        return "";
     }
 }
