@@ -20,8 +20,10 @@ class TransactionRepositoryInMemory implements TransactionRepository
 
     public function createTransaction(Transaction $transaction): void
     {
-        $dateTime = strtotime($transaction->time);
-        $transaction['time'] = $dateTime;
+        $dateTime = date("Y-m-d H:i:s", strtotime($transaction->time));
+        var_dump($dateTime);
+        die;
+        //$transaction->time = $dateTime;
         $this->transactions[] = $transaction;
     }
 

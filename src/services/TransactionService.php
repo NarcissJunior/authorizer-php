@@ -34,7 +34,7 @@ class TransactionService
         $response["violations"] = [];
 
         if (!$account) {
-            $response["violations"][] = "account-notinitialized";
+            $response["violations"][] = "account-not-initialized";
         }
 
         if (!$account->activeCard) {

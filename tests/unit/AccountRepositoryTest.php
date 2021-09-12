@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class AccountRepositoryTest extends TestCase
 {
-    public function test_should_create_an_account_and_save_in_repository()
+    public function test_should_create_an_account_and_save_in_repository(): void
     {
         // Arrange
         $repository = new AccountRepositoryInMemory();
@@ -28,7 +28,7 @@ class AccountRepositoryTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    public function test_should_update_an_existing_account()
+    public function test_should_update_an_existing_account(): void
     {
         // Arrange
         $repository = new AccountRepositoryInMemory();

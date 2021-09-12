@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class AccountServiceTest extends TestCase
 {
-    public function test_should_process_and_return_account()
+    public function test_should_process_and_return_account(): void
     {
         // Arrange
         $accountRepository = new AccountRepositoryInMemory();
@@ -23,7 +23,7 @@ class AccountServiceTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    public function test_should_return_account_already_initialized_violation()
+    public function test_should_return_account_already_initialized_violation(): void
     {
         // Arrange
         $accountRepository = new AccountRepositoryInMemory();

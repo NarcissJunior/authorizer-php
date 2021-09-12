@@ -2,7 +2,44 @@
 
 namespace Tests\unit;
 
-class TransactionServiceTest
-{
+use Authorizer\repositories\AccountRepositoryInMemory;
+use Authorizer\repositories\TransactionRepositoryInMemory;
+use Authorizer\services\AccountService;
+use Authorizer\services\TransactionService;
+use PHPUnit\Framework\TestCase;
 
+class TransactionServiceTest extends TestCase
+{
+    private $transactionRules;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->transactionRules = [
+            \Authorizer\services\transaction_rules\DoubleTransactionRule::class,
+            \Authorizer\services\transaction_rules\HighFrequencySmallIntervalRule::class
+        ];
+    }
+    public function test_should_process_transaction_and_return_account_updated(): void
+    {
+        // Arrange
+        $accountRepository = new AccountRepositoryInMemory();
+        $accountService = new AccountService($accountRepository);
+        $transactionRepository = new TransactionRepositoryInMemory();
+
+        $accountParams = ["active-card" => true, "available-limit" => 100];
+        $transactionParams = ["transaction" => ["merchant" => "Burger King", "amount" => 20, "time" => "2019-02-13T11:00:00.000Z"]];
+        $accountService->createAccount($accountParams);
+        $account = $accountRepository->getAccount();
+
+        $service = new TransactionService($accountRepository, $transactionRepository, $this->transactionRules);
+
+        // Act
+        $actual = $service->processTransaction($transactionParams);
+        $expected = $accountRepository->getAccount();
+
+        // Assert
+        self::assertEquals($expected, $actual);
+    }
 }

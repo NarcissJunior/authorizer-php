@@ -11,18 +11,13 @@ class HighFrequencySmallIntervalRule implements TransactionRule
         $transactionRepository = new TransactionRepositoryInMemory();
         $transactions = $transactionRepository->getTransactions();
 
-        if ($transactions[0] === null)
-        {
-            return "";
-        }
+        $sizeList = count($transactions);
+        $timeLimit = 2 * time()->minute;
 
-        $myCount = 0;
+	    if ($sizeList >= 3) {
+            timeDiff := transaction.Time.Sub($transactions[3]->time);
 
-        for ($i = 0; $i <= count($transactions); $i++) {
-            if ($transactions[$i]->time === $transactions[$i-1]) {
-                $myCount++;
-            }
-            if ($myCount == 3) {
+            if timeDiff < timeLimit {
                 return "high-frequency-small-interval";
             }
         }
