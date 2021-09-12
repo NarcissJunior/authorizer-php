@@ -30,6 +30,12 @@ class Processor
                 return $this->accountService->createAccount($arrayValue);
             case $this->accountTransaction:
                 $arrayValue = reset($inputArray);
+
+                $dateTime = date("Y-m-d H:i:s", strtotime($arrayValue['time']));
+                var_dump(strtotime($arrayValue['time']));
+                var_dump($dateTime);
+                var_dump("oi");
+
                 $this->transactionService->processTransaction($arrayValue);
                 break;
             case "undefined":

@@ -10,17 +10,17 @@ class DoubleTransactionRule implements TransactionRule
     {
         $transactionRepository = new TransactionRepositoryInMemory();
         $transactions = $transactionRepository->getTransactions();
-
-        $timeLimit = 2 * time()->minute;
-
-        foreach ($transactions as $transaction) {
-            if ($transaction->merchant === $transactionQueVouReceber) {
-                $duration = $transaction->time . Sub($transactionQueVouReceber->time);
-                if ($duration < $timeLimit) {
-                    return "double-transaction";
-                }
-            }
-        }
+//
+//        $timeLimit = 2 * time()->minute;
+//
+//        foreach ($transactions as $transaction) {
+//            if ($transaction->merchant === $transactionQueVouReceber) {
+//                $duration = $transaction->time . Sub($transactionQueVouReceber->time);
+//                if ($duration < $timeLimit) {
+//                    return "double-transaction";
+//                }
+//            }
+//        }
 
         return "";
     }
