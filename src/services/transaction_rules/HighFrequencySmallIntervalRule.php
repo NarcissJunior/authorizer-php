@@ -2,26 +2,22 @@
 
 namespace Authorizer\services\transaction_rules;
 
-use Authorizer\repositories\TransactionRepositoryInMemory;
+use Authorizer\entities\Transaction;
+use Authorizer\repositories\TransactionRepository;
 
 class HighFrequencySmallIntervalRule implements TransactionRule
 {
-    public function authorize(): string
+    public function authorize(Transaction $transaction, TransactionRepository $repository): string
     {
-        $transactionRepository = new TransactionRepositoryInMemory();
-        $transactions = $transactionRepository->getTransactions();
+        $transactions = $repository->getTransactions();
+        $sizeList = count($transactions);
 
-//        $sizeList = count($transactions);
-//        $timeLimit = 2 * time()->minute;
-//
-//	    if ($sizeList >= 3) {
-//            timeDiff := transaction.Time.Sub($transactions[3]->time);
-//
-//            if timeDiff < timeLimit {
-//                return "high-frequency-small-interval";
-//            }
-//        }
-
+	    if ($sizeList >= 3) {
+            $diff = (-1) * (strtotime($transactions[$sizeList-3]->time) - strtotime($transaction->time));
+            if ($diff <= 120) {
+                return "high-frequency-small-interval";
+            }
+        }
         return "";
     }
 }

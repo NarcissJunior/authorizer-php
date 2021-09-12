@@ -2,6 +2,7 @@
 
 namespace Authorizer\services;
 
+use Authorizer\entities\Transaction;
 use Authorizer\repositories\AccountRepository;
 use Authorizer\repositories\TransactionRepository;
 
@@ -26,7 +27,7 @@ class TransactionService
         $this->rules = $rules;
     }
 
-    public function processTransaction(array $transaction): array
+    public function processTransaction(array $transactionFields): array
     {
         $account =  $this->accountRepository->getAccount();
 
@@ -41,13 +42,18 @@ class TransactionService
             $response["violations"] = "card-not-active";
         }
 
-        if ($account->availableLimit < $transaction["amount"]) {
+        if ($account->availableLimit < $transactionFields["amount"]) {
             $response["violations"] = " insufficient-limit";
         }
 
+        $transaction = new Transaction();
+        $transaction->merchant = $transactionFields['merchant'];
+        $transaction->amount = $transactionFields['amount'];
+        $transaction->time = $transactionFields['time'];
+
         foreach ($this->rules as $rule) {
-            $validator = new TransactionAuthorizer(new $rule);
-            $response["violations"] = $validator->authorize();
+            $validator = new TransactionAuthorizer(new $rule, $this->transactionRepository);
+            $response["violations"] = $validator->authorize($transaction);
         }
 
         $account->availableLimit = $account->availableLimit - $transaction["amount"];

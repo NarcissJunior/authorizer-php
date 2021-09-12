@@ -2,11 +2,13 @@
 
 namespace Authorizer\services\transaction_rules;
 
+use Authorizer\entities\Transaction;
+use Authorizer\repositories\TransactionRepository;
 use Authorizer\repositories\TransactionRepositoryInMemory;
 
 class DoubleTransactionRule implements TransactionRule
 {
-    public function authorize(): string
+    public function authorize(Transaction $transaction, TransactionRepository $repository): string
     {
         $transactionRepository = new TransactionRepositoryInMemory();
         $transactions = $transactionRepository->getTransactions();

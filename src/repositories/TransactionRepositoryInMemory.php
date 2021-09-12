@@ -13,19 +13,13 @@ class TransactionRepositoryInMemory implements TransactionRepository
         $this->transactions = [];
     }
 
-    public function getTransactions(): ?array
+    public function getTransactions(): array
     {
-        return $this->transactions ?? null;
+        return $this->transactions;
     }
 
     public function createTransaction(Transaction $transaction): void
     {
-        $dateTime = date("Y-m-d H:i:s", strtotime($transaction->time));
-        var_dump(strtotime($transaction->time));
-        var_dump($dateTime);
-        var_dump("oi");
-        die;
-        //$transaction->time = $dateTime;
         $this->transactions[] = $transaction;
     }
 
