@@ -39,8 +39,8 @@ class DoubleTransactionRuleTest extends TestCase
             $transaction->merchant = $arrayValue["merchant"];
             $transaction->amount = $arrayValue["amount"];
             $transaction->time = $arrayValue["time"];
-            $this->repository->createTransaction($transaction);
             $this->actual = $this->authorizer->authorize($transaction);
+            $this->repository->createTransaction($transaction);
         }
 
         // Assert
@@ -64,8 +64,8 @@ class DoubleTransactionRuleTest extends TestCase
             $transaction->merchant = $arrayValue["merchant"];
             $transaction->amount = $arrayValue["amount"];
             $transaction->time = $arrayValue["time"];
-            $this->repository->createTransaction($transaction);
             $this->actual = $this->authorizer->authorize($transaction);
+            $this->repository->createTransaction($transaction);
         }
 
         // Assert
