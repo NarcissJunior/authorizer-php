@@ -10,8 +10,8 @@ use Authorizer\repositories\TransactionRepositoryInMemory;
 require __DIR__ . '/vendor/autoload.php';
 
 $transactionRules = [
-    \Authorizer\services\transaction_rules\DoubleTransactionRule::class,
-    \Authorizer\services\transaction_rules\HighFrequencySmallIntervalRule::class
+    \Authorizer\services\transaction_rules\HighFrequencySmallIntervalRule::class,
+    \Authorizer\services\transaction_rules\DoubleTransactionRule::class
 ];
 
 $accountRepository = new AccountRepositoryInMemory();

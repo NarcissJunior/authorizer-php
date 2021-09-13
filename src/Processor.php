@@ -30,10 +30,9 @@ class Processor
                 return $this->accountService->createAccount($arrayValue);
             case $this->accountTransaction:
                 $arrayValue = reset($inputArray);
-                $this->transactionService->processTransaction($arrayValue);
-                break;
+                return $this->transactionService->processTransaction($arrayValue);
             case "undefined":
-                echo "deu ruim";
+                echo "500 - Internal Error!!";
                 break;
         }
         return [];
