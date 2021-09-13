@@ -27,17 +27,18 @@ class TransactionServiceTest extends TestCase
         $accountRepository = new AccountRepositoryInMemory();
         $accountService = new AccountService($accountRepository);
         $transactionRepository = new TransactionRepositoryInMemory();
+        $service = new TransactionService($accountRepository, $transactionRepository, $this->transactionRules);
 
         $accountParams = ["active-card" => true, "available-limit" => 100];
-        $transactionParams = ["merchant" => "Burger King", "amount" => 20, "time" => "2019-02-13T11:00:00.000Z"];
         $accountService->createAccount($accountParams);
         $account = $accountRepository->getAccount();
+        $expected["account"] = $account;
+        $expected["violations"] = "";
 
-        $service = new TransactionService($accountRepository, $transactionRepository, $this->transactionRules);
+        $transactionParams = ["merchant" => "Burger King", "amount" => 20, "time" => "2019-02-13T11:00:00.000Z"];
 
         // Act
         $actual = $service->processTransaction($transactionParams);
-        $expected = $accountRepository->getAccount();
 
         // Assert
         self::assertEquals($expected, $actual);

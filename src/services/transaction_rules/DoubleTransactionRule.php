@@ -11,7 +11,6 @@ class DoubleTransactionRule implements TransactionRule
     {
         $transactions = $repository->getTransactions();
 
-
         if (count($transactions) >= 2) {
             foreach ($transactions as $arrayTransactions) {
                 if ($transaction->merchant === $arrayTransactions->merchant && $transaction->amount === $arrayTransactions->amount) {

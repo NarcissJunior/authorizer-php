@@ -69,6 +69,5 @@ class TransactionService
         $this->accountRepository->updateAccount($account);
 
         return $response;
-
     }
 }
