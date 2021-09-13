@@ -29,7 +29,7 @@ class TransactionServiceTest extends TestCase
         $transactionRepository = new TransactionRepositoryInMemory();
 
         $accountParams = ["active-card" => true, "available-limit" => 100];
-        $transactionParams = ["transaction" => ["merchant" => "Burger King", "amount" => 20, "time" => "2019-02-13T11:00:00.000Z"]];
+        $transactionParams = ["merchant" => "Burger King", "amount" => 20, "time" => "2019-02-13T11:00:00.000Z"];
         $accountService->createAccount($accountParams);
         $account = $accountRepository->getAccount();
 

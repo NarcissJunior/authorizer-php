@@ -14,14 +14,9 @@ class DoubleTransactionRule implements TransactionRule
 
         if (count($transactions) >= 2) {
             foreach ($transactions as $arrayTransactions) {
-
-
                 if ($transaction->merchant === $arrayTransactions->merchant && $transaction->amount === $arrayTransactions->amount) {
-
                     $diff = (-1) * (strtotime($arrayTransactions->time) - strtotime($transaction->time));
-
                     if ($diff <= 120) {
-
                         return "double-transaction";
                     }
                 }

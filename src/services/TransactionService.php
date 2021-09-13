@@ -37,23 +37,24 @@ class TransactionService
 
         if (!$account) {
             $response["violations"] = "account-not-initialized";
-            return $response;
+            $flag = true;
         }
 
         if (!$account->activeCard) {
             $response["violations"] = "card-not-active";
-            return $response;
+            $flag = true;
         }
 
         if ($account->availableLimit < $transactionFields["amount"]) {
             $response["violations"] = " insufficient-limit";
-            return $response;
+            $flag = true;
         }
 
         $transaction = new Transaction();
         $transaction->merchant = $transactionFields['merchant'];
         $transaction->amount = $transactionFields['amount'];
         $transaction->time = $transactionFields['time'];
+        $this->transactionRepository->createTransaction($transaction);
 
         foreach ($this->rules as $rule) {
             $validator = new TransactionAuthorizer(new $rule, $this->transactionRepository);
@@ -61,7 +62,6 @@ class TransactionService
         }
 
         if ($flag) {
-            $response["violations"] = $algumRetornoAi;
             return $response;
         }
 
