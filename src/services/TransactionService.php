@@ -30,13 +30,13 @@ class TransactionService
     public function processTransaction(array $transactionFields): array
     {
         $account =  $this->accountRepository->getAccount();
-
+        $flag = false;
 
         $response["account"] = $account;
         $response["violations"] = [];
 
         if (!$account) {
-            $response["violations"][] = "account-not-initialized";
+            $response["violations"] = "account-not-initialized";
             return $response;
         }
 
@@ -60,9 +60,15 @@ class TransactionService
             $response["violations"] = $validator->authorize($transaction);
         }
 
+        if ($flag) {
+            $response["violations"] = $algumRetornoAi;
+            return $response;
+        }
+
         $account->availableLimit = $account->availableLimit - $transactionFields["amount"];
         $this->accountRepository->updateAccount($account);
 
         return $response;
+
     }
 }
