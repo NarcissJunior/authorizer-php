@@ -32,6 +32,7 @@ class TransactionService
         $account =  $this->accountRepository->getAccount();
 
         $response["account"] = $account;
+        $response["violations"] = [];
 
         if (!$account) {
             $response["violations"][] = "account-not-initialized";
@@ -52,7 +53,9 @@ class TransactionService
 
         foreach ($this->rules as $rule) {
             $validator = new TransactionAuthorizer(new $rule, $this->transactionRepository);
-            $response["violations"][] = $validator->authorize($transaction);
+            if ($validator->authorize($transaction) != "") {
+                $response["violations"][] = $validator->authorize($transaction);
+            }
         }
 
         $this->transactionRepository->createTransaction($transaction);
