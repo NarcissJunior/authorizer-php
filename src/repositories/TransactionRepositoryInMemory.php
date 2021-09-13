@@ -22,5 +22,4 @@ class TransactionRepositoryInMemory implements TransactionRepository
     {
         $this->transactions[] = $transaction;
     }
-
 }

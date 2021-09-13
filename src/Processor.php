@@ -19,7 +19,7 @@ class Processor
         $this->transactionService = $transactionService;
     }
 
-    public function process(string $request): array
+    public function process(string $request): ?array
     {
         $inputArray = json_decode($request, true);
         $index = array_key_first($inputArray);
@@ -35,7 +35,7 @@ class Processor
                 echo "500 - Internal Error!!";
                 break;
         }
-        return [];
+        return null;
     }
 
 }

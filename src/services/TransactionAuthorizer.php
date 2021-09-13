@@ -21,7 +21,7 @@ class TransactionAuthorizer
         $this->repository = $repository;
     }
 
-    public function authorize(Transaction $transaction): string
+    public function authorize(Transaction $transaction): ?string
     {
         return $this->rule->authorize($transaction, $this->repository);
     }

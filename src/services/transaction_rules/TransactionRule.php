@@ -7,5 +7,5 @@ use Authorizer\repositories\TransactionRepository;
 
 interface TransactionRule
 {
-    public function authorize(Transaction $transaction, TransactionRepository $repository): string;
+    public function authorize(Transaction $transaction, TransactionRepository $repository): ?string;
 }

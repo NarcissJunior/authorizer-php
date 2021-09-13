@@ -32,21 +32,17 @@ class TransactionService
         $account =  $this->accountRepository->getAccount();
 
         $response["account"] = $account;
-        $response["violations"] = [];
 
         if (!$account) {
-            $response["violations"] = "account-not-initialized";
-            return $response;
+            $response["violations"][] = "account-not-initialized";
         }
 
         if (!$account->activeCard) {
-            $response["violations"] = "card-not-active";
-            return $response;
+            $response["violations"][] = "card-not-active";
         }
 
         if ($account->availableLimit < $transactionFields["amount"]) {
-            $response["violations"] = "insufficient-limit";
-            return $response;
+            $response["violations"][] = "insufficient-limit";
         }
 
         $transaction = new Transaction();
@@ -56,14 +52,14 @@ class TransactionService
 
         foreach ($this->rules as $rule) {
             $validator = new TransactionAuthorizer(new $rule, $this->transactionRepository);
-            $response["violations"] = $validator->authorize($transaction);
-            if ($response["violations"] !== "")
-            {
-                return $response;
-            }
+            $response["violations"][] = $validator->authorize($transaction);
         }
 
         $this->transactionRepository->createTransaction($transaction);
+
+        if (!empty($response["violations"])) {
+            return $response;
+        }
 
         $account->availableLimit = $account->availableLimit - $transactionFields["amount"];
         $this->accountRepository->updateAccount($account);
