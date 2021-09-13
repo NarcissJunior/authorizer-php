@@ -4,25 +4,29 @@ namespace Authorizer\services\transaction_rules;
 
 use Authorizer\entities\Transaction;
 use Authorizer\repositories\TransactionRepository;
-use Authorizer\repositories\TransactionRepositoryInMemory;
 
 class DoubleTransactionRule implements TransactionRule
 {
     public function authorize(Transaction $transaction, TransactionRepository $repository): string
     {
-        $transactionRepository = new TransactionRepositoryInMemory();
-        $transactions = $transactionRepository->getTransactions();
-//
-//        $timeLimit = 2 * time()->minute;
-//
-//        foreach ($transactions as $transaction) {
-//            if ($transaction->merchant === $transactionQueVouReceber) {
-//                $duration = $transaction->time . Sub($transactionQueVouReceber->time);
-//                if ($duration < $timeLimit) {
-//                    return "double-transaction";
-//                }
-//            }
-//        }
+        $transactions = $repository->getTransactions();
+
+
+        if (count($transactions) >= 2) {
+            foreach ($transactions as $arrayTransactions) {
+
+
+                if ($transaction->merchant === $arrayTransactions->merchant && $transaction->amount === $arrayTransactions->amount) {
+
+                    $diff = (-1) * (strtotime($arrayTransactions->time) - strtotime($transaction->time));
+
+                    if ($diff <= 120) {
+
+                        return "double-transaction";
+                    }
+                }
+            }
+        }
 
         return "";
     }
