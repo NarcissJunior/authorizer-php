@@ -30,40 +30,36 @@ class TransactionService
     public function processTransaction(array $transactionFields): array
     {
         $account =  $this->accountRepository->getAccount();
-        $flag = false;
 
         $response["account"] = $account;
         $response["violations"] = [];
 
         if (!$account) {
             $response["violations"] = "account-not-initialized";
-            $flag = true;
+            return $response;
         }
 
         if (!$account->activeCard) {
             $response["violations"] = "card-not-active";
-            $flag = true;
+            return $response;
         }
 
         if ($account->availableLimit < $transactionFields["amount"]) {
-            $response["violations"] = " insufficient-limit";
-            $flag = true;
+            $response["violations"] = "insufficient-limit";
+            return $response;
         }
 
         $transaction = new Transaction();
         $transaction->merchant = $transactionFields['merchant'];
         $transaction->amount = $transactionFields['amount'];
         $transaction->time = $transactionFields['time'];
-        $this->transactionRepository->createTransaction($transaction);
 
         foreach ($this->rules as $rule) {
             $validator = new TransactionAuthorizer(new $rule, $this->transactionRepository);
             $response["violations"] = $validator->authorize($transaction);
-        }
-
-        if ($flag) {
             return $response;
         }
+        $this->transactionRepository->createTransaction($transaction);
 
         $account->availableLimit = $account->availableLimit - $transactionFields["amount"];
         $this->accountRepository->updateAccount($account);

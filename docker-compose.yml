@@ -5,7 +5,6 @@ services:
   php:
     build:
       context: .
-    image: narciso/authorizer
     container_name: authorizer
     volumes:
       - .:/var/www/html
