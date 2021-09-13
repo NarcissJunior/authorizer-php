@@ -31,11 +31,12 @@ class TransactionService
     {
         $account =  $this->accountRepository->getAccount();
 
-        $response["account"] = $account;
+        $response["account"] = [];
         $response["violations"] = [];
 
         if (!$account) {
             $response["violations"][] = "account-not-initialized";
+            return $response;
         }
 
         if (!$account->activeCard) {
@@ -61,11 +62,16 @@ class TransactionService
         $this->transactionRepository->createTransaction($transaction);
 
         if (!empty($response["violations"])) {
+            $response["account"]["active-card"] = $account->activeCard;
+            $response["account"]["available-limit"] = $account->availableLimit;
             return $response;
         }
 
         $account->availableLimit = $account->availableLimit - $transactionFields["amount"];
         $this->accountRepository->updateAccount($account);
+
+        $response["account"]["active-card"] = $account->activeCard;
+        $response["account"]["available-limit"] = $account->availableLimit;
 
         return $response;
     }

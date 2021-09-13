@@ -2,10 +2,23 @@
 version: '3'
 
 services:
-  php:
-    build:
-      context: .
-    container_name: authorizer
+  composer:
+    image: composer:1.9.3
+    environment:
+      - COMPOSER_CACHE_DIR=/app/.cache/composer
     volumes:
-      - .:/var/www/html
-    command: [ "./docker-entrypoint.sh" ]
+      - .:/app
+
+  php:
+    image: php:7.4-cli
+    volumes:
+      - .:/app
+    command: sh -c 'composer update && vendor/bin/phpunit'
+    working_dir: /
+
+  phpunit:
+    image: php:7.4-cli
+    volumes:
+      - .:/app
+    working_dir: /app
+    entrypoint: vendor/bin/phpunit

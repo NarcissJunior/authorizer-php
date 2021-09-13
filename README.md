@@ -44,4 +44,4 @@ After the verifications, you can see the results in the standard output in Json.
 
 To run the application tests use this command:
 
-    "./vendor/bin/phpunit" tests/unit
+    php vendor/phpunit/phpunit/phpunit tests/unit
