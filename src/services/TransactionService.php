@@ -57,9 +57,12 @@ class TransactionService
         foreach ($this->rules as $rule) {
             $validator = new TransactionAuthorizer(new $rule, $this->transactionRepository);
             $response["violations"] = $validator->authorize($transaction);
-            return $response;
+            $this->transactionRepository->createTransaction($transaction);
+            if ($response["violations"] !== "")
+            {
+                return $response;
+            }
         }
-        $this->transactionRepository->createTransaction($transaction);
 
         $account->availableLimit = $account->availableLimit - $transactionFields["amount"];
         $this->accountRepository->updateAccount($account);
