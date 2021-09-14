@@ -18,6 +18,10 @@ We have some business rules that can be checked here:
 To build and run the application you need PHP version 7.4 installed or docker.
 Below you can see both examples.
 
+<br>
+
+####Spoiler: Unfortunately, Docker is not working properly.
+####You need to run the application locally.
 
 ### Docker
 
@@ -33,9 +37,19 @@ To run the application, use this command and choose a file to see the output:
 
 ### Local
 
+To Run the application locally, you need PHP 7.4 and composer installed in your machine.
+<br>
+Run `composer install` to install all dependencies, then you are ready to test the application.
+
+<br>
 You can start the application using the following command:
 
     php index.php < documents/{file-name}.txt
+
+Example:
+
+    php index.php < documents/success-transaction.txt
+
 
 This command will run the application passing the specified file. It will receive in the standard Input and proccess the file based on the rules above.
 After the verifications, you can see the results in the standard output in Json.
@@ -44,4 +58,4 @@ After the verifications, you can see the results in the standard output in Json.
 
 To run the application tests use this command:
 
-    php vendor/phpunit/phpunit/phpunit tests/unit
+    php vendor/phpunit/phpunit/phpunit tests
