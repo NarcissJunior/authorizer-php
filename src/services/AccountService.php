@@ -24,6 +24,9 @@ class AccountService
 
         if ($this->accountRepository->getAccount() !== null){
             $response["violations"][] = "account-already-initialized";
+            $account = $this->accountRepository->getAccount();
+            $response["account"]["active-card"] = $account->activeCard;
+            $response["account"]["available-limit"] = $account->availableLimit;
             return $response;
         }
 

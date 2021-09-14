@@ -31,10 +31,8 @@ class TransactionServiceTest extends TestCase
 
         $accountParams = ["active-card" => true, "available-limit" => 100];
         $accountService->createAccount($accountParams);
-        $account = $accountRepository->getAccount();
-        $expected["account"] = $account;
-        $expected["violations"] = "";
 
+        $expected = ["account" => ["active-card" => true, "available-limit" => 80], "violations" => []];
         $transactionParams = ["merchant" => "Burger King", "amount" => 20, "time" => "2019-02-13T11:00:00.000Z"];
 
         // Act

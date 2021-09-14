@@ -69,7 +69,6 @@ class ProcessorTest extends TestCase
             $actual = $this->processor->process($input[$i]);
             self::assertEquals($results[$i], $actual);
         }
-        // Assert
 
     }
 }
